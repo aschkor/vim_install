@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 import urllib.request
 import stat
 import os
+import shutil
 from pip._internal import main
 from pathlib import Path
 is_linux = os.name == 'posix'
@@ -14,6 +16,7 @@ def init_directory():
 	dir_name = "neovim"
 	if is_linux:
 		dir_name = '.'+dir_name
+
 	dir_path =  os.path.join(Path.home(),dir_name)
 	os.mkdir(dir_path)
 	if is_windows:
@@ -46,7 +49,46 @@ def config_sys_path(app_path):
 		f.write('alias nvim=\''+app_path+'\'\n')
 		f.close()
 
-path = init_directory()
-path = install_python(path)
-config_sys_path(path)
+def remove_install(dir_path,app_name):
+	if is_linux:
+		shutil.rmtree(dir_path)
+	main(["uninstall",'--yes',app_name])
 
+def remove_sys_path(app_path):
+	if is_linux:
+		bashrc = os.path.join(Path.home(),'.bashrc')
+		file_content = []
+		fr =open(bashrc,'r')
+		
+		while True:
+			line=fr.readline()
+			if len(line) == 0:
+				break
+			alias = 'alias nvim=\''+app_path+'\'\n'
+			if line != alias:
+				file_content.append(line)
+
+		fr.close
+		os.remove(bashrc)
+		
+		fw =open(bashrc,'a')
+
+		for line in file_content:
+			fw.write(line)
+		fw.close
+
+
+def remove_nvim():
+
+	print('removing nvim')
+	app_name = 'neovim.appimage'
+	dir_path = os.path.join(Path.home(),'.neovim')
+	app_path = os.path.join(dir_path,'neovim.appimage')
+	
+	remove_install(dir_path,'neovim')
+	remove_sys_path(app_path)
+	
+remove_nvim()
+#path = init_directory()
+#path = install_python(path)
+#config_sys_path(path)
