@@ -1,0 +1,20 @@
+def remove_path(app_path):
+	bashrc = os.path.join(Path.home(),'.bashrc')
+	file_content = []
+	fr =open(bashrc,'r')
+
+	while True:
+		line=fr.readline()
+		if len(line) == 0:
+			break
+		alias = 'alias nvim=\''+app_path+'\'\n'
+		if line != alias:
+			file_content.append(line)
+	fr.close
+	os.remove(bashrc)
+
+	fw =open(bashrc,'a')
+
+	for line in file_content:
+		fw.write(line)
+	fw.close
