@@ -21,3 +21,5 @@ if __name__ == "__main__":
 	install.install_bin()
 	install.install_pymodul()
 	install.add_del_script()
+	install.copy_conf_file()
+	install.write_init_file()
