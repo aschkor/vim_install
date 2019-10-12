@@ -1,0 +1,2 @@
+scrooloose/nerdTree
+nmap <F3> :NERDTreeToggle<CR>
