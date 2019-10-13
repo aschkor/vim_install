@@ -1,7 +1,13 @@
 from pathlib import Path
 from appdirs import *
 class var:
+    """
+    Global variables
+    """
     def __init__(self,app_name):
+        """
+        Initialize global variables
+        """
         script_path = Path(os.path.dirname(sys.argv[0]))
         self.user_data_dir = Path(user_data_dir(app_name))
         res_dir = script_path / 'install'/'res'
@@ -11,7 +17,13 @@ class var:
         self.install_dir_src = script_path / 'install'
 
 class var_neovim(var):
+    """
+    Global variable for neovim
+    """
     def __init__(self):
+        """
+        Initiallize global variables for neovim
+        """
         app_name = 'nvim'
         super().__init__(app_name)
         self.bin_dir_path = Path.home() / '.local'/ 'bin' / app_name

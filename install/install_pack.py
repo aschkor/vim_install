@@ -3,12 +3,22 @@ import git
 from pathlib import Path
 
 class pack:
+    """
+    Represente information over a vim plugin
+    """
     def __init__(self,url,options,pack_dir):
+        """
+        Initialze information ovec a pack
+        """
         self.url = 'https://github.com/'+url
         self.options = options
         self.pack_dir = self.format_path(pack_dir)
 
     def format_path (self,pack_dir):
+        """
+        Isolate the plugin description path to respecte 
+        the directory hierarchy of plugins in the pack directory
+        """
         part = pack_dir.parts
         is_end_path = False
         res = Path() 
@@ -23,16 +33,21 @@ class pack:
 
 
 def install_pack(var):
+    """
+    Install all packs
+    """
     packs_parameters = get_pack_parameters(var.descr_file_pack_path)
     if packs_parameters == None:
         return
-
 
     clone_packs(packs_parameters,var.pack_dir)
     write_packs_option(packs_parameters,var)
 
 
 def get_pack_parameters(pack_file_dir):
+    """
+    Read a description pach file and return structured information on him
+    """
     packs_parameters = []
     for pack_file_path in pack_file_dir.glob('**/*'):
         if pack_file_path.is_file():
@@ -45,6 +60,9 @@ def get_pack_parameters(pack_file_dir):
 
 
 def get_parameter_options(pack_file_content):
+    """
+    Read facultatif option in a desccription pack file
+    """
     if len(pack_file_content) < 1:
         return None
 
@@ -53,12 +71,18 @@ def get_parameter_options(pack_file_content):
     return option_pack
 
 def clone_packs(packs_parameters,packs_dir):
+    """
+    Downlaod pack with a git client
+    """
     for pack_parameters in packs_parameters:
         pack_dir =packs_dir/pack_parameters.pack_dir 
         pack_dir.mkdir(0o777,True,True)
         git.Git(pack_dir).clone(pack_parameters.url)
 
 def write_packs_option(packs_parameters,var):
+    """
+    Write packs option in configuration file
+    """
     options = get_packs_options_content(packs_parameters)
 
     if len(options) > 0:
@@ -69,12 +93,18 @@ def write_packs_option(packs_parameters,var):
 
 
 def add_pack_option_file_to_conf_file(main_conf_file_path,pack_options_file_path):
+    """
+    Add the path to the pack configuration file on the main configuration file
+    """
     f = main_conf_file_path.open('a')
     f.write('source '+str(pack_options_file_path) + '\n')
     f.close()
 
 
 def get_packs_options_content(packs_parameters):
+    """
+    Generate content of pack configuration file
+    """
     options = "" 
     for pack_parameter in packs_parameters:
         if pack_parameter != None:
@@ -85,4 +115,7 @@ def get_packs_options_content(packs_parameters):
 
 
 def write_packs_options_conf_file(options, file_path):
+    """
+    Write the packs configuration file
+    """
     file_path.write_text(options)
