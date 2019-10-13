@@ -9,12 +9,12 @@ def install_bin(var):
     var.bin_path.chmod(0o744)
 
 def install_py_module():
-    main(["install","--user","neovim"])
+    main(['install','--user','neovim'])
 
 
 def install_linux_syspath(bin_path):
     init_vim = Path.home()/'.bashrc'
-    f=open(init_vim,"a+")
+    f=open(init_vim,'a+')
     f.write('alias nvim=\''+str(bin_path)+'\'\n')
     f.close()
 

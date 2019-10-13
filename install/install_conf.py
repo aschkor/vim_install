@@ -8,7 +8,7 @@ def install_conf(var):
 
 
 def get_init_content(var):
-    content = ""
+    content = '' 
     for conf_file in var.files_conf_dir.iterdir():
         content+='source '
         content+=str(var.conf_path/conf_file.name)
