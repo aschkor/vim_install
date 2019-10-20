@@ -1,7 +1,8 @@
-from pip._internal import main
+
+import pip
 
 def install_module(mod):
-    main(["install","--user",mod])
+    pip.main(["install","--user",mod])
 
 if __name__ == "__main__":
     install_module("appdirs")

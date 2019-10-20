@@ -1,4 +1,4 @@
-from pip._internal import main
+import pip
 import urllib.request
 from .var import var_neovim
 from pathlib import Path
@@ -15,7 +15,7 @@ def install_py_module():
     """
     Downlaod neovim python module
     """
-    main(['install','--user','neovim'])
+    pip.main(['install','--user','neovim'])
 
 
 def install_linux_syspath(bin_path):
