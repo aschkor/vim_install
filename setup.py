@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import argparse
-
-from install.install import install
-from install.var import var_neovim
-
+from install.install import install_neovim_linux
+from install.install import install_neovim_windows
+from install.var import var_neovim_linux
+from install.var import var_neovim_windows
+import sys
+import platform
 
 def parse():
     parser =argparse.ArgumentParser(description='Install vim or neovim with packages as user')
@@ -14,13 +15,14 @@ def parse():
 
 
 if __name__ == '__main__':
-    
-    parser = parse()
-    
-    if parser.soft == 'neovim':
-        global_var = var_neovim()
-        install(global_var)
-    elif parser.soft == 'vim':
-        pass
 
+    print(platform.architecture()[0])
 
+    if sys.platform.startswith('linux'):
+        global_var = var_neovim_linux()
+        install_neovim_linux(global_var)
+    elif sys.platform.startswith('win32'):
+        global_var = var_neovim_windows()
+        install_neovim_windows(global_var)
+    else:
+        print('The platform '+ sys.platform() + 'is not suported')
