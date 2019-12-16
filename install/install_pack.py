@@ -6,23 +6,24 @@ class pack:
     """
     Represente information over a vim plugin
     """
-    def __init__(self,url,options,pack_dir):
+    def __init__(self,author,repo,options,pack_dir):
         """
         Initialze information ovec a pack
         """
-        self.url = 'https://github.com/'+url
+        self.url = 'https://github.com/'+author+'/'+repo
+        self.name = repo
         self.options = options
         self.pack_dir = self.format_path(pack_dir)
 
     def format_path (self,pack_dir):
         """
-        Isolate the plugin description path to respecte 
+        Isolate the plugin description path to respecte
         the directory hierarchy of plugins in the pack directory
         """
         part = pack_dir.parts
         is_end_path = False
-        res = Path() 
-        
+        res = Path()
+
         for p in part:
             if is_end_path:
                 res = res / p
@@ -40,7 +41,15 @@ def install_pack(var):
     if packs_parameters == None:
         return
 
-    clone_packs(packs_parameters,var.pack_dir)
+    for pack_parameters in packs_parameters:
+        pack_dir = var.pack_dir/pack_parameters.pack_dir
+        repo_dir = pack_dir/pack_parameters.name
+        if(repo_dir.exists()):
+            update_pack(git.Git(repo_dir))
+        else:
+            pack_dir.mkdir(0o740,True,True)
+            clone_pack(pack_parameters.url,git.Git(pack_dir))
+
     write_packs_option(packs_parameters,var)
 
 
@@ -52,9 +61,10 @@ def get_pack_parameters(pack_file_dir):
     for pack_file_path in pack_file_dir.glob('**/*'):
         if pack_file_path.is_file():
             pack_parameters = pack_file_path.read_text().split('\n')
-            packs_parameters.append(pack(pack_parameters[0],get_parameter_options(pack_parameters),pack_file_path.parent))
+            url = pack_parameters[0].split('/')
+            packs_parameters.append(pack(url[0],url[1],get_parameter_options(pack_parameters),pack_file_path.parent))
 
-    if len(packs_parameters) > 0:
+    if(len(packs_parameters) > 0):
         return packs_parameters
     return None
 
@@ -70,14 +80,17 @@ def get_parameter_options(pack_file_content):
     option_pack.pop(0)
     return option_pack
 
-def clone_packs(packs_parameters,packs_dir):
+def update_pack(repo):
+    """
+    Update the pack
+    """
+    repo.pull()
+
+def clone_pack(url,repo):
     """
     Downlaod pack with a git client
     """
-    for pack_parameters in packs_parameters:
-        pack_dir =packs_dir/pack_parameters.pack_dir 
-        pack_dir.mkdir(0o777,True,True)
-        git.Git(pack_dir).clone(pack_parameters.url)
+    repo.clone(url)
 
 def write_packs_option(packs_parameters,var):
     """
@@ -105,7 +118,7 @@ def get_packs_options_content(packs_parameters):
     """
     Generate content of pack configuration file
     """
-    options = "" 
+    options = ""
     for pack_parameter in packs_parameters:
         if pack_parameter != None:
             for option in pack_parameter.options:

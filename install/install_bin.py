@@ -56,12 +56,12 @@ def install_neovim_linux_bin(var):
 
     if(platform.architecture()[0] != '32bit'):
         install_bin_neovim_linux(var)
+        install_linux_syspath(var.bin_path)
     else:
         print('appimage not available on 32bits systeme, install neovim with yours package manager.'
             'The neovim version maybe outdated')
 
     install_py_module()
-    install_linux_syspath(var.bin_path)
 
 
 def install_neovim_windows_bin(var):
