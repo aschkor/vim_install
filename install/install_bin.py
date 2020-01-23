@@ -4,7 +4,6 @@ from .var import var_neovim
 from pathlib import Path
 import zipfile
 import os
-import platform
 
 
 def install_bin_neovim_linux(var):
@@ -49,20 +48,18 @@ def install_windows_syspath(bin_path):
     os.environ['Path'] += os.pathsep + str(bin_path)
 
 
-def install_neovim_linux_bin(var):
+def install_neovim_linux_bin(var,is_32bits):
     """
     Install neovim on Windows
     """
 
-    if(platform.architecture()[0] != '32bit'):
-        install_bin_neovim_linux(var)
-        install_linux_syspath(var.bin_path)
-    else:
+    if(is_32bits):
         print('appimage not available on 32bits systeme, install neovim with yours package manager.'
             'The neovim version maybe outdated')
-
+    else:
+        install_bin_neovim_linux(var)
+        install_linux_syspath(var.bin_path)
     install_py_module()
-
 
 def install_neovim_windows_bin(var):
     """
