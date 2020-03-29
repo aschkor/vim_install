@@ -44,11 +44,12 @@ def install_pack(var):
     for pack_parameters in packs_parameters:
         pack_dir = var.pack_dir/pack_parameters.pack_dir
         repo_dir = pack_dir/pack_parameters.name
-        if(repo_dir.exists()):
-            update_pack(git.Git(repo_dir))
-        else:
+        print (pack_dir)
+        print (repo_dir)
+        if(not repo_dir.exists()):
+            """update_pack(git.Remote(repo_dir))"""
             pack_dir.mkdir(0o740,True,True)
-            clone_pack(pack_parameters.url,git.Git(pack_dir))
+            clone_pack(pack_parameters.url,git.Git(pack_dir),repo_dir)
 
     write_packs_option(packs_parameters,var)
 
@@ -80,17 +81,20 @@ def get_parameter_options(pack_file_content):
     option_pack.pop(0)
     return option_pack
 
+
 def update_pack(repo):
     """
     Update the pack
     """
     repo.pull()
 
-def clone_pack(url,repo):
+
+def clone_pack(url,repo,repo_dir):
     """
     Downlaod pack with a git client
     """
-    repo.clone(url)
+    repo.clone(url,repo_dir)
+
 
 def write_packs_option(packs_parameters,var):
     """
@@ -102,7 +106,6 @@ def write_packs_option(packs_parameters,var):
         pack_option_conf_file = var.conf_path / 'pack_option.vim'
         add_pack_option_file_to_conf_file(var.conf_file_path,pack_option_conf_file)
         write_packs_options_conf_file(options,pack_option_conf_file)
-
 
 
 def add_pack_option_file_to_conf_file(main_conf_file_path,pack_options_file_path):

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from shutil import copyfile
 import platform
 
 from .install_bin import install_neovim_linux_bin
@@ -38,6 +37,8 @@ def copy_utility_file(var):
     """
     Copy utility script into the binary directory
     """
-    copyfile(var.install_dir_src / 'var.py', var.utility_file_dir / 'var.py')
+    print(var.install_dir_src / 'var.py')
+    print(var.utility_file_dir / 'var.py')
+    (var.utility_file_dir / 'var.py').write_text((var.install_dir_src / 'var.py').read_text())
     for utility in var.utility_dir.iterdir():
-        copyfile(utility,var.utility_file_dir / utility.name)
+        (var.utility_file_dir / utility.name).write_text(utility.read_text())

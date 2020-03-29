@@ -44,7 +44,7 @@ class var_neovim_linux(var_neovim):
         """
         super().__init__()
         self.bin_dir_path = Path.home() / '.local' / 'bin' / 'nvim'
-        self.bin_url = 'https://github.com/neovim/neovim/releases/download/v0.4.2/nvim.appimage'
+        self.bin_url = 'https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage'
         self.bin_path = self.bin_dir_path / 'nvim.appimage'
         self.pack_dir = self.user_data_dir / 'site' / 'pack'
         self.utility_file_dir = self.bin_dir_path

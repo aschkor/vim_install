@@ -8,12 +8,6 @@ from install.var import var_neovim_windows
 import sys
 import platform
 
-def parse():
-    parser =argparse.ArgumentParser(description='Install vim or neovim with packages as user')
-    parser.add_argument('soft', help = 'choose vim or neovim to install')
-    return parser.parse_args()
-
-
 if __name__ == '__main__':
 
     print(platform.architecture()[0])
@@ -25,4 +19,4 @@ if __name__ == '__main__':
         global_var = var_neovim_windows()
         install_neovim_windows(global_var)
     else:
-        print('The platform '+ sys.platform() + 'is not suported')
+        print('The platform ' + sys.platform() + 'is not suported')
